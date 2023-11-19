@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to the Eldercare webapp!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<link rel="stylesheet" href="/bootstrap.min.css" media="screen"/>
+</head>
+<body>
+	<div class="container">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>Welcome to your care management webapp</h1>
+
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h2>Submit consumer request</h2>
+			<form th:action="@{/elderRequest}" method="post">
+            	<div class="form-group">
+	                <label class="col-lg-3 control-label">Add for Consumer (Enter Id)</label>
+	                    <div class="col-lg-9">
+	                    	<input type="text" class="form-control" name="careReceiverId"/>
+	                    </div>
+                </div>
+            	<div class="form-group">
+	                <label class="col-lg-3 control-label">Enter Service Type</label>
+	                    <div class="col-lg-9">
+	                    	<input type="text" class="form-control" name="serviceType"/>
+	                    </div>
+                </div>
+			    <div>
+			        <label >Request on date</label>
+			        <input type="date" name="requestDate"/>
+			    </div>
+			    <div>
+			        <button type="submit" class="button">Submit</button>
+			    </div>
+			</form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h2>Submit Appointment request</h2>
+			<form th:action="@{/bookAppointment}" method="post">
+            	<div class="form-group">
+	                <label class="col-lg-3 control-label">Add for Consumer (Enter Id)</label>
+	                    <div class="col-lg-9">
+	                    	<input type="text" class="form-control" name="careReceiverId"/>
+	                    </div>
+                </div>
+            	<div class="form-group">
+	                <label class="col-lg-3 control-label">Add for Service Provider (Enter Id)</label>
+	                    <div class="col-lg-9">
+	                    	<input type="text" class="form-control" name="careProviderId"/>
+	                    </div>
+                </div>
+            	<div class="form-group">
+	                <label class="col-lg-3 control-label">Enter Service Type</label>
+	                    <div class="col-lg-9">
+	                    	<input type="text" class="form-control" name="serviceType"/>
+	                    </div>
+                </div>
+			    <div  class="form-group">
+			        <label class="col-lg-3 control-label">Request on date</label>
+			        <input type="date" name="requestDate"/>
+			    </div>
+			    <div>
+			        <button type="submit" class="button">Submit</button>
+			    </div>
+			</form>
+          </div>
+        </div>
+
+
+<!--
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h2>Submit availability for a service provider</h2>
+			<form th:action="@{/client/{id}/addAvailability(id=${client.clientId})}" method="post">
+            	<div class="form-group">
+	                <label class="col-lg-3 control-label">Add for Service Provider (Enter Id)</label>
+	                    <div class="col-lg-9">
+	                    	<input type="text" class="form-control" name="providerId"/>
+	                    </div>
+                	</div>
+			    <div>
+			        <label >Available on date</label>
+			        <input type="date" name="availableDate"/>
+			    </div>
+			    <div>
+			        <button type="submit" class="button">Submit</button>
+			    </div>
+			</form>
+          </div>
+        </div>
+-->
+      </div>
+	</div>
+</body>
+</html>
