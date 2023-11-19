@@ -9,194 +9,14 @@
 <body>
 	<div class="container">
       <div class="page-header" id="banner">
-        <div class="row">
-          <div class="col-lg-8 col-md-7 col-sm-6">
-            <h1>Clients</h1>
-
-			<table class="table table-striped table-hover">
-				<thead>
-					<tr>
-						<th>Id</th>
-						<th>Name</th>
-					</tr>
-				</thead>
-				<tbody>
-				    <tr>
-				    	<td th:text="${client.clientId}"></td>
-				    	<td th:text="${client.clientName}"></td>
-				    </tr>
-				</tbody>
-			</table>
-          </div>
-        </div>
         
-        <div class="row">
-          <div class="col-lg-8 col-md-7 col-sm-6">
-            <h1>Submit a consumer to list below</h1>
-
-            <form class="form-horizontal" th:action="@{/client/{id}/consumer(id=${client.clientId})}" method="post" enctype="multipart/form-data" >
-            	<fieldset>
-                    <div class="form-group">
-	                    <label class="col-lg-2 control-label">Consumers</label>
-	                    <div class="col-lg-10">
-							<div th:each="consumer : ${client.consumers}">
-								<span th:text="${consumer.consumerId}" />, <span th:text="${consumer.consumerName}" />, <span th:text="${consumer.location}" />
-					    		,<span th:each="request,iterStat : ${consumer.consumerRequests}">
-					    			<span th:text="${request.requestId}"/> <span th:text="${request.requestDate}"/> <span th:text="${request.serviceType}"/> <th:block th:if="${!iterStat.last}">:</th:block>
-					    		</span>
-					    		,<span th:each="appointment,iterStat : ${consumer.appointments}">
-					    			<span th:text="${appointment.consumerId}"/>,<span th:text="${appointment.providerID}"/>,<span th:text="${appointment.appointmentDate}"/>,<span th:text="${appointment.serviceType}"/><th:block th:if="${!iterStat.last}">:</th:block>
-					    		</span>
-							</div>
-	                    </div>
-	                </div>
-            		<div class="form-group">
-	                    <label class="col-lg-3 control-label">Add Consumer Name</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="consumerName"/>
-	                    </div>
-                	</div>
-            		<div class="form-group">
-	                    <label class="col-lg-3 control-label">Add Location</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="location"/>
-	                    </div>
-                	</div>
-            		<div class="form-group">
-                		<div class="col-lg-12 col-lg-offset-3">
-                			<button type="submit" class="btn btn-primary" name="button">Create</button>
-                		</div>
-                	</div>
-            	</fieldset>
-            </form>
-          </div>
-        </div>
-        
-        <div class="row">
-          <div class="col-lg-8 col-md-7 col-sm-6">
-            <h1>Submit a service provider to list below</h1>
-
-            <form class="form-horizontal" th:action="@{/client/{id}/serviceProvider(id=${client.clientId})}" method="post" enctype="multipart/form-data" >
-            	<fieldset>
-                    <div class="form-group">
-	                    <label class="col-lg-2 control-label">Service Providers</label>
-	                    <div class="col-lg-10">
-							<div th:each="serviceProvider : ${client.serviceProviders}">
-								<span th:text="${serviceProvider.providerId}" />, <span th:text="${serviceProvider.providerName}" />, <span th:text="${serviceProvider.location}" />, <span th:text="${serviceProvider.avgRating}"  />
-					    		,<span th:each="service,iterStat : ${serviceProvider.servicesOffered}">
-					    			<span th:text="${service}"/><th:block th:if="${!iterStat.last}">:</th:block>
-					    		</span>
-					    		, <span th:text="${#dates.format(serviceProvider.availability, 'dd/MM/yyyy')}" />
-					    		,<span th:each="appointment,iterStat : ${serviceProvider.bookings}">
-					    			<span th:text="${appointment.consumerId}"/>,<span th:text="${appointment.providerID}"/>,<span th:text="${appointment.appointmentDate}"/>,<span th:text="${appointment.serviceType}"/><th:block th:if="${!iterStat.last}">:</th:block>
-					    		</span>
-							</div>
-	                    </div>
-	                </div>
-            		<div class="form-group">
-	                    <label class="col-lg-3 control-label">Add Service Provider Name</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="providerName"/>
-	                    </div>
-                	</div>
-            		<div class="form-group">
-	                    <label class="col-lg-3 control-label">Add Location</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="location"/>
-	                    </div>
-                	</div>
-            		<div class="form-group">
-	                    <label class="col-lg-3 control-label">Add Avg Rating</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="avgRating"/>
-	                    </div>
-                	</div>
-            		<div class="form-group">
-	                    <label class="col-lg-3 control-label">Add Services Offered (Separate by commas)</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="servicesOffered"/>
-	                    </div>
-                	</div>
-				    <div>
-				        <label class="col-lg-3 control-label">Available on date</label>
-				        <input type="date" name="availableDate"/>
-				    </div>
-            		<div class="form-group">
-                		<div class="col-lg-12 col-lg-offset-3">
-                			<button type="submit" class="btn btn-primary" name="button">Create</button>
-                		</div>
-                	</div>
-            	</fieldset>
-            </form>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-8 col-md-7 col-sm-6">
-            <h2>Submit consumer request</h2>
-			<form th:action="@{/client/{id}/consumerRequest(id=${client.clientId})}" method="post">
-            	<div class="form-group">
-	                <label class="col-lg-3 control-label">Add for Consumer (Enter Id)</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="consumerId"/>
-	                    </div>
-                </div>
-            	<div class="form-group">
-	                <label class="col-lg-3 control-label">Enter Service Type</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="serviceType"/>
-	                    </div>
-                </div>
-			    <div>
-			        <label >Request on date</label>
-			        <input type="date" name="requestDate"/>
-			    </div>
-			    <div>
-			        <button type="submit" class="button">Submit</button>
-			    </div>
-			</form>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-8 col-md-7 col-sm-6">
-            <h2>Submit Appointment request</h2>
-			<form th:action="@{/client/{id}/bookAppointment(id=${client.clientId})}" method="post">
-            	<div class="form-group">
-	                <label class="col-lg-3 control-label">Add for Consumer (Enter Id)</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="consumerId"/>
-	                    </div>
-                </div>
-            	<div class="form-group">
-	                <label class="col-lg-3 control-label">Add for Service Provider (Enter Id)</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="providerId"/>
-	                    </div>
-                </div>
-            	<div class="form-group">
-	                <label class="col-lg-3 control-label">Enter Service Type</label>
-	                    <div class="col-lg-9">
-	                    	<input type="text" class="form-control" name="serviceType"/>
-	                    </div>
-                </div>
-			    <div  class="form-group">
-			        <label class="col-lg-3 control-label">Request on date</label>
-			        <input type="date" name="requestDate"/>
-			    </div>
-			    <div>
-			        <button type="submit" class="button">Submit</button>
-			    </div>
-			</form>
-          </div>
-        </div>
 
 
-<!--
         <div class="row">
           <div class="col-lg-8 col-md-7 col-sm-6">
             <h2>Submit availability for a service provider</h2>
-			<form th:action="@{/client/{id}/addAvailability(id=${client.clientId})}" method="post">
+			<!--form th:action="@{/addAvailability(id=${client.clientId})}" method="post"-->
+			<form>
             	<div class="form-group">
 	                <label class="col-lg-3 control-label">Add for Service Provider (Enter Id)</label>
 	                    <div class="col-lg-9">
@@ -213,7 +33,6 @@
 			</form>
           </div>
         </div>
--->
       </div>
 	</div>
 </body>
