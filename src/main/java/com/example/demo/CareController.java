@@ -5,17 +5,29 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -108,7 +120,60 @@ public class CareController {
 	public String getCareProviderHome() {
 		return "careproviderhome";
 	}
+	
+	@PostMapping("/addAvailability")
+	public String addAvailability(@RequestParam Long clientId,
+			@RequestParam Long providerId,
+			@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date avStart,
+			@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date avEnd,
+			Model model) {
+		/*
+		 * RestTemplate restTemplate = new RestTemplate(); String fooResourceUrl =
+		 * "http://localhost:8080/clients"; ResponseEntity<String> response =
+		 * restTemplate.getForEntity(fooResourceUrl, String.class);
+		 * System.out.println("Client list from server:" + response.getBody());
+		 */		
 		
+		  LocalDateTime as = avStart.toInstant() .atZone(ZoneId.systemDefault())
+		  .toLocalDateTime();
+		  
+		  LocalDateTime ae = avEnd.toInstant() .atZone(ZoneId.systemDefault())
+		  .toLocalDateTime();
+		  
+		  TupleDateTime ldt = new TupleDateTime(as, ae);
+		 		
+		
+		// Send Post
+		String url = "http://localhost:8080/client/{ci}/addAvailability?providerId={pi}";
+		
+		/*
+		 * String url = "https://localhost:8080/client/"+ clientId.toString()
+		 * +"/addAvailability?providerId=" + providerId.toString();
+		 * 
+		 * System.out.println(url);
+		 */		  RestTemplate rt = new RestTemplate();
+
+		
+//		HttpHeaders headers = new HttpHeaders();
+//		HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
+		
+		Map<String, Long> uriVariables = new HashMap<>();
+        uriVariables.put("ci", clientId);
+        uriVariables.put("pi", providerId);
+ 
+		HttpEntity<TupleDateTime> requestEntity = new HttpEntity<>(ldt);
+        ResponseEntity<TupleDateTime> response = rt.exchange(url, HttpMethod.POST, requestEntity, TupleDateTime.class, uriVariables);
+		
+		//TupleDateTime c = rt.postForObject(url, requestEntity, TupleDateTime.class);
+        
+		//model.addAttribute("added", c);
+
+		model.addAttribute("added", response.getBody());
+		return "careproviderhome";
+		
+	}
+	
+	
 	@PostMapping("/elderRequest")
 	public String elderRequestAdd(@RequestParam Long careReceiverId,
 		@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date requestDate,

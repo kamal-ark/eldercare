@@ -16,6 +16,7 @@
           <div class="col-lg-8 col-md-7 col-sm-6">
             <h2>Submit availability for a service provider</h2>
 			<!--form th:action="@{/addAvailability(id=${client.clientId})}" method="post"-->
+			<form th:action="@{/addAvailability(clientId=1)}" method="post">
 			<form>
             	<div class="form-group">
 	                <label class="col-lg-3 control-label">Add for Service Provider (Enter Id)</label>
@@ -23,16 +24,48 @@
 	                    	<input type="text" class="form-control" name="providerId"/>
 	                    </div>
                 	</div>
+                <br>
 			    <div>
-			        <label >Available on date</label>
-			        <input type="date" name="availableDate"/>
+			        <label >Available from</label>
+			        <input type="date" name="avStart"/>
 			    </div>
+			    <br>
+			    <div>
+			        <label >to</label>
+			        <input type="date" name="avEnd"/>
+			    </div>
+				<br>
 			    <div>
 			        <button type="submit" class="button">Submit</button>
 			    </div>
 			</form>
           </div>
         </div>
+        
+        
+        <br>
+        <div th:if="${added !=null}">
+        	Added availability from <i th:text="${added.startTime}"> </i> to <i th:text="${added.endTime}"> </i>!
+        </div>
+        <br>
+        
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>Start</th>
+						<th>End</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				    <tr th:each="av : ${avs}">
+				    	<td th:text="${avs.startTime}"></td>
+				    	<td th:text="${avs.endTime}"></td>
+				    </tr>
+				</tbody>
+			</table>
+
+        
       </div>
 	</div>
 </body>
